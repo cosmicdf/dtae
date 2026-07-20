@@ -10,6 +10,7 @@ on:
     branches: [main]
     paths:
       - "packages/core/**"
+  workflow_dispatch:
 
 jobs:
   test:
@@ -31,7 +32,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
 
       - name: Install dependencies
         run: pip install -e ".[dev]"
