@@ -1,0 +1,56 @@
+name: CI — FastAPI Server
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "packages/api/**"
+      - "packages/core/**"
+      - ".github/workflows/ci-api.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "packages/api/**"
+
+jobs:
+  test:
+    name: Test API (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    defaults:
+      run:
+        working-directory: packages/api
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install core dependency
+        run: uv pip install ../core --system --no-cache
+
+      - name: Install API dependencies
+        run: uv pip install -e ".[dev]" --system --no-cache
+
+      - name: Lint
+        run: uv run ruff check app
+
+      - name: Run tests
+        run: uv run pytest tests/ -v
+
+  docker:
+    name: Docker build check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API image
+        run: docker build -f packages/api/Dockerfile -t dtae-api:ci .
