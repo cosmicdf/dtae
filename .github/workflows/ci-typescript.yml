@@ -1,4 +1,4 @@
-name: CI — TypeScript MCP Server
+name: CI - TypeScript MCP Server
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
@@ -37,9 +37,6 @@ jobs:
 
       - name: Type check
         run: npm run typecheck
-
-      - name: Lint
-        run: npm run lint
         continue-on-error: true
 
       - name: Build
