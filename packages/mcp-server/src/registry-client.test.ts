@@ -1,4 +1,4 @@
-import { RegistryClient } from "./registry-client";
+import { RegistryClient } from "./registry-client.js";
 
 describe("RegistryClient", () => {
   it("constructs with a base URL", () => {

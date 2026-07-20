@@ -33,9 +33,11 @@
     "ts-jest": "^29.0.0"
   },
   "jest": {
-    "preset": "ts-jest",
     "testEnvironment": "node",
-    "testMatch": ["**/*.test.ts"]
+    "testMatch": ["**/*.test.ts"],
+    "transform": {
+      "^.+\\.tsx?$": ["ts-jest", {"tsconfig": {"module": "CommonJS", "moduleResolution": "node"}}]
+    }
   },
   "engines": {
     "node": ">=20"
