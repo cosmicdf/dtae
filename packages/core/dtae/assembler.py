@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from .graph import ToolGraph
@@ -40,11 +41,12 @@ class DynamicToolAssembler:
         self._embedder: Any = None
         self._step = 0
 
-        try:
-            from fastembed import TextEmbedding
-            self._embedder = TextEmbedding()
-        except ImportError:
-            pass
+        if os.getenv("DTAE_DISABLE_EMBEDDINGS", "").lower() != "true":
+            try:
+                from fastembed import TextEmbedding
+                self._embedder = TextEmbedding()
+            except ImportError:
+                pass
 
     def assemble(
         self,

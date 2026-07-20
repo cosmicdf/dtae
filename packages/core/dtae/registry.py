@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -24,6 +25,8 @@ class ToolRegistry:
         self._embedder = self._load_embedder(embedding_model)
 
     def _load_embedder(self, model: str) -> Any:
+        if os.getenv("DTAE_DISABLE_EMBEDDINGS", "").lower() == "true":
+            return None
         try:
             from fastembed import TextEmbedding
             return TextEmbedding(model_name=model)
